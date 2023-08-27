@@ -19,8 +19,8 @@ pipeline {
 
         stage ('Check secrets') {
           steps {
-              sh '/home/ubuntu/.local/bin/trufflehog3 https://github.com/shubnimkar/CI_CD_Devsecops.git -f json -o truffelhog_output.json || true'
-        
+              sh '/home/ubuntu/.local/bin/trufflehog3 https://github.com/shubnimkar/CI_CD_Devsecops.git -format json -output truffelhog_output.json || true'
+              sh 'trufflehog3 -R report.json --output report.html'
       }
          
         
