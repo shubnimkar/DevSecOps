@@ -111,9 +111,14 @@ pipeline {
                 
 		    sh 'docker stop owasp'
 		    sh 'docker rm owasp'
-                    // Run OWASP ZAP scan using Docker
-                    sh 'docker run -v $(pwd):/zap/wrk --name owasp owasp/zap2docker-stable zzap-full-scan.py -t http://3.108.238.36:8081/petclinic -J report.json || true'
-                    archiveArtifacts artifacts: 'report.json', allowEmptyArchive: true
+                   /* // Run OWASP ZAP scan using Docker
+                    sh 'docker run -v /home/ubuntu:/zap/wrk --name owasp owasp/zap2docker-stable zzap-full-scan.py -t http://3.108.238.36:8081/petclinic -J report.json || true'
+                    archiveArtifacts artifacts: 'report.json', allowEmptyArchive: true */
+
+		    sh 'sudo mkdir -p /opt/zap' 
+         	    sh 'sudo ssh root@13.232.127.89 "sudo docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -J zap_report.json || true" '
+        	    archiveArtifacts artifacts: 'zap_report.json', allowEmptyArchive: true
+	    }
 	    }          
 }
 }
