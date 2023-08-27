@@ -16,3 +16,5 @@ pipeline {
                 git changelog: false, poll: false, url: 'https://github.com/shubnimkar/CI_CD_Devsecops.git'
             }
         }
+    }
+}
