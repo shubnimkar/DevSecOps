@@ -116,7 +116,7 @@ pipeline {
                     archiveArtifacts artifacts: 'report.json', allowEmptyArchive: true */
 
 		    sh ' mkdir -p /opt/zap' 
-         	    sh  " docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -J zap_report.json || true" '
+         	    sh  " docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -J zap_report.json || true" 
         	    archiveArtifacts artifacts: 'zap_report.json', allowEmptyArchive: true
 	    }
 	    }          
