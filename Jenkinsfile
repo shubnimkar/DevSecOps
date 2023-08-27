@@ -80,6 +80,14 @@ pipeline {
                 }
             }
         }
+        
+        stage("Deploy To Tomcat"){
+            steps{
+            
+                sh "cp  /var/lib/jenkins/workspace/DevSecOps/target/petclinic.war /opt/apache-tomcat-9.0.65/webapps/ "
+            }
+        
+        }
 }
 }
 
