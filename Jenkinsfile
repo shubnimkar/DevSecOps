@@ -93,8 +93,8 @@ pipeline {
                 sh 'docker pull owasp/zap2docker-stable'
 
                 sh "docker run -dt --name owasp owasp/zap2docker-stable /bin/bash" 
-                sh
-                """docker exec owasp \
+                sh """
+                docker exec owasp \
                 mkdir /zap/wrk
                 """
                 sh "docker exec owasp zap-baseline.py -t http://3.108.238.36:8081/petclinic -J report.json -l"
