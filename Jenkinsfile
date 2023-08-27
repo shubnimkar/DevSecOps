@@ -97,7 +97,7 @@ pipeline {
                 docker exec owasp \
                 mkdir /zap/wrk
                 """
-                sh "docker exec owasp zap-baseline.py -t http://3.108.238.36:8081/petclinic --x zap_report || true"
+                sh "docker exec owasp zap-baseline.py -t http://3.108.238.36:8081/petclinic -x zap_report || true"
                 //sh "docker cp owasp:/zap/wrk/report.json /var/lib/jenkins/zap/wrk/report.json" 
                 sh "docker stop owasp"
                 sh "docker rmi -f owasp"
