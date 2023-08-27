@@ -105,7 +105,7 @@ pipeline {
                 sh "docker rmi -f owasp"
                 */
                 
-        }
+        
             stage('Run OWASP ZAP Scan') {
             steps {
                 
@@ -113,7 +113,7 @@ pipeline {
                     // Run OWASP ZAP scan using Docker
                     sh 'docker run -v $(pwd):/zap/wrk --name owasp owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -J report.json -l WARN'
                     archiveArtifacts artifacts: 'report.json', allowEmptyArchive: true
-                
+	    }          
 }
 }
     }
