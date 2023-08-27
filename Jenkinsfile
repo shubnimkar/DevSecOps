@@ -88,21 +88,24 @@ pipeline {
             }
         
         }
-        stage('Run ZAP Scan') {
+        stage ("Dynamic Analysis - DAST with OWASP ZAP") { 
             steps {
-                // Start OWASP ZAP and run a security scan
-                sh '''
-                    # Start ZAP in headless mode
-                    docker run -d --name zap-container --memory=2g --memory-swap=3g -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap.sh -cmd -daemon -host 0.0.0.0 -port 8090 -config api.disablekey=true
+                sh 'docker pull owasp/zap2docker-stable'
 
-                    # Run ZAP Baseline Scan
-                    docker exec zap-container zap-baseline.py -t http://3.108.238.36:8081/petclinic -r zap-report_file
+                sh "docker run -dt --name owasp owasp/zap2docker-stable /bin/bash" 
+                sh
+                """docker exec owasp \
+                mkdir /zap/wrk
+                """
+                sh "docker exec owasp zap-baseline.py -t ${http://3.108.238.36:8081/petclinic} -J report.json
+                sh "docker cp owasp:/zap/wrk/report.json /var/lib/jenkins/zap/wrk/report.json" 
+                sh "docker stop owasp"
+                sh "docker rm owasp"
+                
 
-                    # Stop the ZAP container
-                    docker stop zap-container
-                '''
-            }
         }
 }
+}
+    }
 }
 
