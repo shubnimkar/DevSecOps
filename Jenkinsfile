@@ -104,7 +104,6 @@ pipeline {
                 sh "docker stop owasp"
                 sh "docker rmi -f owasp"
                 */
-docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t
         }
 }
 }
