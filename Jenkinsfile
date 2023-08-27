@@ -19,9 +19,8 @@ pipeline {
 
         stage ('Check secrets') {
           steps {
-              sh 'docker run --rm -v /var/lib/jenkins/workspace/DevSecOps:/trufflehog/trufflehog-output trufflesecurity/trufflehog:latest github --org=trufflesecurity -format json -output /trufflehog/trufflehog-output/truffelhog_output.json
-'
-              sh 'trufflehog3 -R report.json --output report.html'
+              sh 'docker run gesellix/trufflehog --json https://github.com/shazz0512/testproject.git > trufflehog'
+              sh 'trufflehog -R report.json --output report.html'
       }
          
     }
