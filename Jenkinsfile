@@ -20,7 +20,7 @@ pipeline {
         stage ('Check secrets') {
           steps {
               sh 'trufflehog3 https://github.com/shubnimkar/CI_CD_Devsecops.git -f html -o truffelhog_report.html || true'
-              
+              sh './truffelhog_report.sh'
       }
             post {
         always {
