@@ -112,7 +112,7 @@ pipeline {
 		    sh 'docker stop owasp'
 		    sh 'docker rm owasp'
                     // Run OWASP ZAP scan using Docker
-                    sh 'docker run -v $(pwd):/zap/wrk --name owasp owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -J report.json -l WARN'
+                    sh 'docker run -v $(pwd):/zap/wrk --name owasp owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -J report.json '
                     archiveArtifacts artifacts: 'report.json', allowEmptyArchive: true
 	    }          
 }
