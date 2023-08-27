@@ -93,7 +93,7 @@ pipeline {
                 // Start OWASP ZAP and run a security scan
                 sh '''
                     # Start ZAP in headless mode
-                    docker run -d --name zap-container -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap.sh -cmd -daemon -host 0.0.0.0 -port 8090 -config api.disablekey=true
+                    docker run -d --name zap-container --memory=2g --memory-swap=3g -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap.sh -cmd -daemon -host 0.0.0.0 -port 8090 -config api.disablekey=true
 
                     # Run ZAP Baseline Scan
                     docker exec zap-container zap-baseline.py -t http://3.108.238.36:8081/petclinic -r zap-report_file
