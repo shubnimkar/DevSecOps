@@ -19,10 +19,11 @@ pipeline {
 
         stage ('Check secrets') {
           steps {
-              sh 'trufflehog3 https://github.com/shubnimkar/CI_CD_Devsecops.git -f html -o truffelhog_report.html || true'
+              sh 'trufflehog3 https://github.com/shubnimkar/CI_CD_Devsecops.git --json /var/lib/jenkins/workspace/DevSecOps > trufflehog_report.json || true'
+              sh 'cd /var/lib/jenkins/workspace/DevSecOps'
               sh './truffelhog_report.sh'
       }
-            post {
+          /*  post {
         always {
             // Publish the Trufflehog HTML report using the "Publish HTML reports" plugin
             publishHTML(target: [
@@ -34,8 +35,9 @@ pipeline {
                 reportName: 'Trufflehog Scan Report'
             ])
         }
-    }
+    }*/
         
     }
 }
 }
+
