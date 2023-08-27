@@ -90,7 +90,9 @@ pipeline {
         }
         stage ("Dynamic Analysis - DAST with OWASP ZAP") { 
             steps {
-                sh 'docker pull owasp/zap2docker-stable'
+                sh 'mkdir -p /opt/zap'
+                sh "docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -x zap_report || true"
+                /*sh 'docker pull owasp/zap2docker-stable'
 
                 sh "docker run -dt --name owasp owasp/zap2docker-stable /bin/bash" 
                 sh """
@@ -101,8 +103,8 @@ pipeline {
                 //sh "docker cp owasp:/zap/wrk/report.json /var/lib/jenkins/zap/wrk/report.json" 
                 sh "docker stop owasp"
                 sh "docker rmi -f owasp"
-                
-
+                */
+docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t
         }
 }
 }
