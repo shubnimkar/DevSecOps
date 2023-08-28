@@ -92,8 +92,9 @@ pipeline {
         }
 
 	stage ("Dynamic Analysis - DAST with OWASP ZAP") {
+		sshagent(['application_server'])
 			steps {
-				sh "docker run -t -v /home/ubuntu:/zap/wrk owasp/zap2docker-stable zap-full-scan.py -t http://3.108.238.36:8081/petclinic/ -J zap-report.json || true"
+				sh 'ssh ubuntu@13.232.127.89 "docker run -t  owasp/zap2docker-stable zap-full-scan.py -t http://3.108.238.36:8081/petclinic/  || true" '
 			}
 		
 		}
