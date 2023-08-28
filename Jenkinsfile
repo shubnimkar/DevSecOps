@@ -11,7 +11,7 @@ pipeline {
     }
     
     stages {
-       /* stage('Git Checkout') {
+        stage('Git Checkout') {
             steps {
                 git changelog: false, poll: false, url: 'https://github.com/shubnimkar/CI_CD_Devsecops.git'
             }
@@ -27,11 +27,11 @@ pipeline {
         stage("OWASP Dependency Check"){
             steps{
                 dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml' 
             }
         }
 
-     /*   stage('Code Compile') {
+      stage('Code Compile') {
             steps {
                 sh "mvn clean compile"
             }
