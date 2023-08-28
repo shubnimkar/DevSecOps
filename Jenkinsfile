@@ -93,6 +93,27 @@ pipeline {
 			}
 			}
 		}
+	stage("Archive ZAP Report") {
+    	steps {
+        archiveArtifacts artifacts: '**/zap_report.xml', allowEmptyArchive: true
+    	}
+
+	post {
+    	always {
+        archiveArtifacts artifacts: '**/zap_report.xml', allowEmptyArchive: true
+        publishHTML target: [
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: '.',
+            reportFiles: 'zap_report.xml',
+            reportName: 'OWASP ZAP Report'
+        ]
+    }
+}
+
+}
+
 
 	
 }
