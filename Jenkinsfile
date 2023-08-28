@@ -8,8 +8,12 @@ pipeline {
     
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
+	REMOTE_SERVER = '13.232.127.89'
+        REMOTE_USER = 'ubuntu'
+        ZAP_PATH = '/opt/zap/zap.sh'
+        TARGET_URL = 'http://3.108.238.36:8081/petclinic'
     }
-    
+  
     stages {
         stage('Git Checkout') {
             steps {
@@ -105,12 +109,7 @@ pipeline {
         
               //}      
          //  }
-	environment {
-        REMOTE_SERVER = '13.232.127.89'
-        REMOTE_USER = 'ubuntu'
-        ZAP_PATH = '/opt/zap/zap.sh'
-        TARGET_URL = 'http://3.108.238.36:8081/petclinic'
-    }
+	
 
     
         stage('Run ZAP Scan') {
