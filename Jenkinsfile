@@ -88,51 +88,14 @@ pipeline {
             }
         
         }
-        /*stage ("Dynamic Analysis - DAST with OWASP ZAP") { 
-            steps {
-                sh 'mkdir -p /opt/zap'
-                sh "docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -x zap_report || true"
-                /*sh 'docker pull owasp/zap2docker-stable'
-
-                sh "docker run -dt --name owasp owasp/zap2docker-stable /bin/bash" 
-                sh """
-                docker exec owasp \
-                mkdir /zap/wrk
-                """
-                sh "docker exec owasp zap-baseline.py -t http://3.108.238.36:8081/petclinic -x zap_report || true"
-                //sh "docker cp owasp:/zap/wrk/report.json /var/lib/jenkins/zap/wrk/report.json" 
-                sh "docker stop owasp"
-                sh "docker rmi -f owasp"
-                */
-                
-        
-           /* stage('Run OWASP ZAP Scan') {
-            steps {
-                
-		   /* sh 'docker stop owasp'
-		    sh 'docker rm owasp'
-                   /* // Run OWASP ZAP scan using Docker
-                    sh 'docker run -v /home/ubuntu:/zap/wrk --name owasp owasp/zap2docker-stable zzap-full-scan.py -t http://3.108.238.36:8081/petclinic -J report.json || true'
-                    archiveArtifacts artifacts: 'report.json', allowEmptyArchive: true */
-
-		   
-    //     	    sh  " docker run --rm -v /home/ubuntu:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -J zap_report.json" 
-  //      	    archiveArtifacts artifacts: 'zap_report.json', allowEmptyArchive: true 
-		    
-//	    }
-//	    }        
+          
 
 	    stage ('Dynamic analysis') {
             steps {
            sshagent(['SSH-Cred']) {
 
-		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -daemon -quickurl http://3.108.238.36:8081/petclinic " '
+		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic " '
 		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -exportreport zap-report.json -reportformat JSON"'
-		 // sh "scp ubuntu@13.232.127.89:/opt/zap-report.json ."
-            	   
-		   //archiveArtifacts artifacts: 'zap_report.json', allowEmptyArchive: true 
-               // sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://3.108.238.36:8081/petclinic -x zap_report || true" '
-		//sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 "sudo ./zap_report.sh"'
               }      
            }      
 }
