@@ -87,63 +87,17 @@ pipeline {
         
         stage("Deploy To Tomcat"){
             steps{
-            
                 sh "cp  /var/lib/jenkins/workspace/DevSecOps/target/petclinic.war /opt/apache-tomcat-9.0.65/webapps/ "
             }
-        
         }
-          
 
-	   // stage ('Dynamic analysis') {
-           // steps {
-          // sshagent(['SSH-Cred']) {
-
-		  // sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic -quickout ~/zap-report.json" '
-		   //sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -exportreport zap-report.json -reportformat JSON"'
-		   //sh "scp ubuntu@13.232.127.89:/opt/zap-report.json ."
-                  // sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://3.108.238.36:8081/petclinic -x zap_report || true" '
-		   //sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 "sudo ./zap_report.sh"'  
-		   //sh 'sudo ssh root@13.232.127.89 "sudo docker run -v :/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py -t https://3.108.238.36:8081/petclinic -g gen.conf -r testreport.html " '
-				 
-	//	    sh 'sudo ssh root@13.232.127.89 "sudo docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -x zap_report || true" '
-        
-              //}      
-         //  }
-	
-
-    
-        stage('Run ZAP Scan') {
-            steps {
-                script {
-                    // Start ZAP daemon
-                    sshCommand remote: "${REMOTE_SERVER}", user: "${REMOTE_USER}", command: "${ZAP_PATH} -daemon"
-
-                    // Run ZAP scan
-                    sshCommand remote: "${REMOTE_SERVER}", user: "${REMOTE_USER}", command: "${ZAP_PATH} -cmd -quickurl ${TARGET_URL}"
-                }
-            }
+	stage ('DAST') {
+      steps {
+         sh 'sudo mkdir -p /opt/zap' 
+         sh 'sudo ssh root@13.232.127.89 "sudo docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -x zap_report || true" '
         }
-        
-        stage('Generate Report') {
-            steps {
-                script {
-                    // Generate ZAP JSON report
-                    sshCommand remote: "${REMOTE_SERVER}", user: "${REMOTE_USER}", command: "${ZAP_PATH} -exportreport zap-report.json -reportformat JSON"
-                    
-                    // Download the report from remote server to Jenkins workspace
-                    sh "scp ${REMOTE_USER}@${REMOTE_SERVER}:~/zap-report.json ."
-                }
-            }
-        }
-    }
+      }
 
-    post {
-        always {
-            // Stop ZAP daemon
-           
-		sshCommand remote: "${REMOTE_SERVER}", user: "${REMOTE_USER}", command: "${ZAP_PATH} -shutdown"
-        }
-    }
 	     
 }
 
