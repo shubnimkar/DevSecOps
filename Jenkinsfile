@@ -90,10 +90,27 @@ pipeline {
 			steps {
 			sshagent(['SSH-Cred']){
 				sh 'ssh ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t  owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -J zap_report.json || true" '
+				//sh 'scp ubuntu@13.232.127.89:/home/ubuntu/zap_report.json /home/ubuntu'
+				stash includes: 'zap_report.json', name: 'zap_report'
+            }
+        }
+    }
+
+
+stage("View ZAP Report") {
+    steps {
+        unstash 'zap_report'
+        script {
+            // Read and print the contents of the JSON report
+            def reportContents = readFile 'zap_report.json'
+            echo reportContents
+        }
+    }
+}	
 			//	sh 'ssh ubuntu@13.232.127.89 "sudo ./zap_report.sh"'
 			}
 			}
-		}
+		
 	/*stage("Archive ZAP Report") {
     	steps {
         archiveArtifacts artifacts: '**///zap_report.xml', allowEmptyArchive: true
@@ -114,11 +131,11 @@ pipeline {
 	//}
 ///	
 
-}
+
 
 
 	
-}
+
 
 
 
