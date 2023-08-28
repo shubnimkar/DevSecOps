@@ -112,7 +112,7 @@ pipeline {
         TARGET_URL = 'http://3.108.238.36:8081/petclinic'
     }
 
-    stages {
+    
         stage('Run ZAP Scan') {
             steps {
                 script {
