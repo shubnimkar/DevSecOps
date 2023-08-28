@@ -90,6 +90,7 @@ pipeline {
 			steps {
 			sshagent(['SSH-Cred']){
 				sh 'ssh ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t  owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -x zap_report || true" '
+				sh 'ssh ubuntu@13.232.127.89 "sudo ./zap_report.sh"'
 			}
 			}
 		}
