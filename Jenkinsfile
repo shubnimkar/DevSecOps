@@ -94,10 +94,17 @@ pipeline {
             steps {
            sshagent(['SSH-Cred']) {
 
-		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic " '
-		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -exportreport zap-report.json -reportformat JSON"'
+		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -daemon -quickurl http://3.108.238.36:8081/petclinic -r -w /opt/zap-report.json" '
+		   //sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -exportreport zap-report.json -reportformat JSON"'
+		   def scpCommand = "scp ubuntu@13.232.127.89:/opt/zap-report.json ."
+                        sh 'scpCommand'
               }      
-           }      
+           }
+	post {
+        always {
+            // Archive the ZAP report as a build artifact
+            archiveArtifacts artifacts: '**/zap-report.json', allowEmptyArchive: true
+        }
 }
 }
 }
