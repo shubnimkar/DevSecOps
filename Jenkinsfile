@@ -11,7 +11,7 @@ pipeline {
     }
     
     stages {
-        stage('Git Checkout') {
+       /* stage('Git Checkout') {
             steps {
                 git changelog: false, poll: false, url: 'https://github.com/shubnimkar/CI_CD_Devsecops.git'
             }
@@ -31,7 +31,7 @@ pipeline {
             }
         }
 
-        stage('Code Compile') {
+     /*   stage('Code Compile') {
             steps {
                 sh "mvn clean compile"
             }
@@ -88,13 +88,13 @@ pipeline {
             }
         
         }
-          
+          */
 
 	    stage ('Dynamic analysis') {
             steps {
            sshagent(['SSH-Cred']) {
 
-		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic -quickout ~/out.xml" '
+		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic -quickout ~/zap-report.json" '
 		   //sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -exportreport zap-report.json -reportformat JSON"'
 		   //sh "scp ubuntu@13.232.127.89:/opt/zap-report.json ."
                   // sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://3.108.238.36:8081/petclinic -x zap_report || true" '
@@ -105,12 +105,12 @@ pipeline {
         
               }      
            }
-	//post {
-        //always {
+	post {
+        always {
             // Archive the ZAP report as a build artifact
-          //  archiveArtifacts artifacts: '**/zap-report.json', allowEmptyArchive: true
-        //}
-//}
+            archiveArtifacts artifacts: '**/zap-report.json', allowEmptyArchive: true
+        }
+}
 }
 }
 }
