@@ -88,7 +88,7 @@ pipeline {
             }
         
         }
-          */
+          
 
 	    stage ('Dynamic analysis') {
             steps {
