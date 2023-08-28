@@ -89,29 +89,30 @@ pipeline {
 	stage ("Dynamic Analysis - DAST with OWASP ZAP") {
 			steps {
 			sshagent(['SSH-Cred']){
-				sh 'ssh ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t  owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -x zap_report || true" '
-				sh 'ssh ubuntu@13.232.127.89 "sudo ./zap_report.sh"'
+				sh 'ssh ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t  owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -J zap_report.json || true" '
+			//	sh 'ssh ubuntu@13.232.127.89 "sudo ./zap_report.sh"'
 			}
 			}
 		}
-	stage("Archive ZAP Report") {
+	/*stage("Archive ZAP Report") {
     	steps {
         archiveArtifacts artifacts: '**/zap_report.xml', allowEmptyArchive: true
     	}
-
-	post {
-    	always {
-        archiveArtifacts artifacts: '**/zap_report.xml', allowEmptyArchive: true
-        publishHTML target: [
-            allowMissing: false,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: '.',
-            reportFiles: 'zap_report.xml',
-            reportName: 'OWASP ZAP Report'
-        ]
-    }
-}
+///
+//	post {
+//    	always {
+//        archiveArtifacts artifacts: '**/zap_report.xml', allowEmptyArchive: true
+//        publishHTML target: [
+//            allowMissing: false,
+//            alwaysLinkToLastBuild: true,
+ //           keepAll: true,
+//            reportDir: '.',
+//            reportFiles: 'zap_report.xml',
+//            reportName: 'OWASP ZAP Report'
+//        ]
+//    }
+	//}
+///	
 
 }
 
