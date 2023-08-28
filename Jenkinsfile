@@ -91,14 +91,12 @@ pipeline {
             }
         }
 
-	stage ('DAST') {
-      steps {
-      sshagent(['application_server']){
-         sh ' mkdir -p /opt/zap' 
-         sh 'sudo ssh root@13.232.127.89 "sudo docker run --rm -u root -v /opt/zap:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -x zap_report || true" '
-        }
-      }
-	}
+	stage ("Dynamic Analysis - DAST with OWASP ZAP") {
+			steps {
+				sh "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -J zap-report.json || true"
+			}
+		
+		}
 
 	     
 }
