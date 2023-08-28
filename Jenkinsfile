@@ -94,10 +94,11 @@ pipeline {
             steps {
            sshagent(['SSH-Cred']) {
 
-		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic -port 8082" '
+		   //sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic -port 8082" '
 		   //sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -exportreport zap-report.json -reportformat JSON"'
-		   sh "scp ubuntu@13.232.127.89:/opt/zap-report.json ."
-                       
+		   //sh "scp ubuntu@13.232.127.89:/opt/zap-report.json ."
+                   sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://3.108.238.36:8081/petclinic -x zap_report || true" '
+		   sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 "sudo ./zap_report.sh"'    
               }      
            }
 	post {
