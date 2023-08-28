@@ -5,14 +5,6 @@ pipeline {
         jdk 'jdk17'
         maven 'maven3'
     }
-    
-    environment {
-        SCANNER_HOME=tool 'sonar-scanner'
-	REMOTE_SERVER = '13.232.127.89'
-        REMOTE_USER = 'ubuntu'
-        ZAP_PATH = '/opt/zap/zap.sh'
-        TARGET_URL = 'http://3.108.238.36:8081/petclinic'
-    }
   
     stages {
         stage('Git Checkout') {
@@ -94,10 +86,11 @@ pipeline {
 	stage ("Dynamic Analysis - DAST with OWASP ZAP") {
 		
 			steps {
+				script{
 				sshagent(['application_server'])
 				sh 'ssh ubuntu@13.232.127.89 "docker run -t  owasp/zap2docker-stable zap-full-scan.py -t http://3.108.238.36:8081/petclinic/  || true" '
 			}
-		
+			}
 		}
 
 	
