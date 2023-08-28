@@ -97,7 +97,7 @@ pipeline {
 	/*stage("Archive ZAP Report") {
     	steps {
         archiveArtifacts artifacts: '**///zap_report.xml', allowEmptyArchive: true
-    	}
+    	//}
 ///
 //	post {
 //    	always {
@@ -120,7 +120,7 @@ pipeline {
 	
 }
 
-}
+
 
     
 
