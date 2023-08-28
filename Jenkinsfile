@@ -135,7 +135,7 @@ pipeline {
                 }
             }
         }
-   
+    }
 
     post {
         always {
@@ -143,7 +143,7 @@ pipeline {
             sshCommand remote: "${REMOTE_SERVER}", user: "${REMOTE_USER}", command: "${ZAP_PATH} -shutdown"
         }
     }
-	     }
+	     
 }
 
 
