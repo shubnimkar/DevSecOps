@@ -106,7 +106,7 @@ pipeline {
                 */
                 
         
-            stage('Run OWASP ZAP Scan') {
+           /* stage('Run OWASP ZAP Scan') {
             steps {
                 
 		   /* sh 'docker stop owasp'
@@ -116,10 +116,19 @@ pipeline {
                     archiveArtifacts artifacts: 'report.json', allowEmptyArchive: true */
 
 		   
-         	    sh  " docker run --rm -v /home/ubuntu:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -J zap_report.json" 
-        	    archiveArtifacts artifacts: 'zap_report.json', allowEmptyArchive: true
-	    }
-	    }          
+    //     	    sh  " docker run --rm -v /home/ubuntu:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic -J zap_report.json" 
+  //      	    archiveArtifacts artifacts: 'zap_report.json', allowEmptyArchive: true 
+		    
+//	    }
+//	    }        
+
+	    stage ('Dynamic analysis') {
+            steps {
+           sshagent(['application_server']) {
+                sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 " docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://43.204.29.139/WebGoat -x zap_report || true" '
+		sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.127.89 " ./zap_report.sh"'
+              }      
+           }     
 }
 }
     
