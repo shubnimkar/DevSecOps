@@ -140,7 +140,8 @@ pipeline {
     post {
         always {
             // Stop ZAP daemon
-            sshCommand remote: "${REMOTE_SERVER}", user: "${REMOTE_USER}", command: "${ZAP_PATH} -shutdown"
+           
+		sshCommand remote: "${REMOTE_SERVER}", user: "${REMOTE_USER}", command: "${ZAP_PATH} -shutdown"
         }
     }
 	     
