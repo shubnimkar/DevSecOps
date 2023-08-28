@@ -126,7 +126,7 @@ pipeline {
             steps {
            sshagent(['SSH-Cred']) {
 
-		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic -quickout zap-report.json" '
+		   sh 'ssh ubuntu@13.232.127.89 "sudo /opt/zap/zap.sh -cmd -quickurl http://3.108.238.36:8081/petclinic " '
 		 // sh "scp ubuntu@13.232.127.89:/opt/zap-report.json ."
             	   
 		   //archiveArtifacts artifacts: 'zap_report.json', allowEmptyArchive: true 
