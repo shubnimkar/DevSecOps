@@ -99,13 +99,7 @@ stage ('Check secrets') {
             }
         }
         
-        stage("Deploy To Tomcat"){
-            steps{
-                sh "cp  /var/lib/jenkins/workspace/DevSecOps/target/petclinic.war /opt/apache-tomcat-9.0.65/webapps/ "
-            }
-        }
- 	
-	
+        
 	stage("TRIVY") {
    	 steps {
         script {
@@ -124,7 +118,12 @@ stage ('Check secrets') {
         }
     }
 }
-
+	    
+	stage("Deploy To Tomcat"){
+            steps{
+                sh "cp  /var/lib/jenkins/workspace/DevSecOps/target/petclinic.war /opt/apache-tomcat-9.0.65/webapps/ "
+            }
+        }
 
 	    
 	stage ("Dynamic Analysis - DAST with OWASP ZAP") {
