@@ -86,11 +86,27 @@ pipeline {
             }
         }
  	
-	stage("TRIVY"){
-            steps{
-                sh " trivy image adijaiswal/pet-clinic123:latest"
+	
+	stage("TRIVY") {
+   	 steps {
+        script {
+            def trivyScanOutput = sh(script: 'trivy image shubnimkar/pet-clinic25:latest', returnStatus: true)
+            
+            if (trivyScanOutput == 0) {
+                def htmlReport = sh(script: 'trivy image shubnimkar/pet-clinic25:latest | awk \'{print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td></tr>"}\' > trivy-report.html', returnStdout: true)
+                
+                archiveArtifacts artifacts: 'trivy-report.html', allowEmptyArchive: true
+                
+                // Publish HTML report using Jenkins' HTML Publisher Plugin
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: '', reportFiles: 'trivy-report.html', reportName: 'Trivy Scan Report'])
+            } else {
+                error "Trivy scan failed"
             }
         }
+    }
+}
+
+
 	    
 	stage ("Dynamic Analysis - DAST with OWASP ZAP") {
 			steps {
