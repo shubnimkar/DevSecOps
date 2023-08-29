@@ -85,51 +85,24 @@ pipeline {
                 sh "cp  /var/lib/jenkins/workspace/DevSecOps/target/petclinic.war /opt/apache-tomcat-9.0.65/webapps/ "
             }
         }
-
+ 	
+	stage("TRIVY"){
+            steps{
+                sh " trivy image adijaiswal/pet-clinic123:latest"
+            }
+        }
+	    
 	stage ("Dynamic Analysis - DAST with OWASP ZAP") {
 			steps {
 			sshagent(['SSH-Cred']){
 				sh 'ssh ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t  owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -J zap_report.json || true" '
-				//sh 'scp ubuntu@13.232.127.89:/home/ubuntu/zap_report.json /home/ubuntu'
-				stash includes: 'zap_report.json', name: 'zap_report'
             }
         }
     }
-
-
-stage("View ZAP Report") {
-    steps {
-        unstash 'zap_report'
-        script {
-            // Read and print the contents of the JSON report
-            def reportContents = readFile 'zap_report.json'
-            echo reportContents
-        }
     }
-}	
-			//	sh 'ssh ubuntu@13.232.127.89 "sudo ./zap_report.sh"'
-			}
-			}
-		
-	/*stage("Archive ZAP Report") {
-    	steps {
-        archiveArtifacts artifacts: '**///zap_report.xml', allowEmptyArchive: true
-    	//}
-///
-//	post {
-//    	always {
-//        archiveArtifacts artifacts: '**/zap_report.xml', allowEmptyArchive: true
-//        publishHTML target: [
-//            allowMissing: false,
-//            alwaysLinkToLastBuild: true,
- //           keepAll: true,
-//            reportDir: '.',
-//            reportFiles: 'zap_report.xml',
-//            reportName: 'OWASP ZAP Report'
-//        ]
-//    }
-	//}
-///	
+}
+
+
 
 
 
