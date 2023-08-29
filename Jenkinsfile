@@ -41,15 +41,7 @@ stage ('Check secrets') {
         archiveArtifacts artifacts: 'scanresults/trufflehog-report.html', allowEmptyArchive: true
     }
 }
-/*
-        stage ('Check secrets') {
-          steps {
-              sh 'docker run gesellix/trufflehog --json https://github.com/shubnimkar/CI_CD_Devsecops.git > trufflehog'
-              sh 'cat trufflehog'
-      }
-         
-    }
-    */
+
         stage("OWASP Dependency Check"){
             steps{
                 dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
@@ -139,6 +131,8 @@ stage ('Check secrets') {
 			steps {
 			sshagent(['SSH-Cred']){
 				sh 'ssh ubuntu@13.232.127.89 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t  owasp/zap2docker-stable zap-baseline.py -t http://3.108.238.36:8081/petclinic/ -J zap_report.json || true" '
+				archiveArtifacts artifacts: 'zap_report.html', allowEmptyArchive: true
+
             }
         }
     }
