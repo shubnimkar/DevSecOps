@@ -1,6 +1,8 @@
 # DevSecOps SDLC Pipeline
+![DevSecOps SDLC](https://github.com/shubnimkar/DevSecOps/assets/46809421/c119aec4-b686-4c15-91cb-8c655669970f)
 
 ## Objective:
+
 Implement a robust DevSecOps pipeline to ensure secure software development and continuous monitoring for vulnerabilities.
 
 ## Tools and Technologies:
