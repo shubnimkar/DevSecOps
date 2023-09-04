@@ -87,19 +87,7 @@ stage ('Check secrets') {
                 }
             }
         }
-        
-        stage("Docker Tag & Push"){
-            steps{
-                script{
-                   withDockerRegistry([url:'https://index.docker.io/v1/',credentialsId: '69fb7f6f-90ba-4bab-baf3-765387680986', toolName: 'docker']) {
-                        sh "docker tag petclinic1 shubnimkar/pet-clinic25:latest"
-                        sh "docker push shubnimkar/pet-clinic25:latest"
-                    }
-                }
-            }
-        }
-        
-        
+
 	stage("TRIVY") {
    	 steps {
         script {
@@ -118,6 +106,18 @@ stage ('Check secrets') {
         }
     }
 }
+        
+        stage("Docker Tag & Push"){
+            steps{
+                script{
+                   withDockerRegistry([url:'https://index.docker.io/v1/',credentialsId: '69fb7f6f-90ba-4bab-baf3-765387680986', toolName: 'docker']) {
+                        sh "docker tag petclinic1 shubnimkar/pet-clinic25:latest"
+                        sh "docker push shubnimkar/pet-clinic25:latest"
+                    }
+                }
+            }
+        }
+        
 	    
 	stage("Deploy To Tomcat"){
             steps{
