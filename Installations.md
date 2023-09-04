@@ -92,6 +92,86 @@
 	
 	sudo systemctl status jenkins
 
+# SONARQUBE INSTALLATION STEPS
+
+	sudo apt update -y
+	
+	sudo apt-get install \
+	    ca-certificates \
+	    curl \
+	    gnupg \
+	    lsb-release
+	    
+	sudo mkdir -m 0755 -p /etc/apt/keyrings
+	
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+	
+	echo \
+	  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+	  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	
+	sudo apt update -y
+	
+	sudo apt-get install docker-ce docker-ce-cli docker-compose -y
+	
+	sudo vi /etc/sysctl.conf
+	
+	---In the Config file, press the “I” key to insert content and add the below lines at the end of the file and save the changes.---
+	
+	vm.max_map_count=262144
+	fs.file-max=65536
+	
+	sudo sysctl -p
+	
+	sudo groupadd docker
+	sudo usermod -aG docker ubuntu
+	
+	---Create a docker-compose file and start the Sonar server---
+	
+	version: "3"
+	
+	services:
+	  sonarqube:
+	    image: sonarqube:community
+	    depends_on:
+	      - db
+	    environment:
+	      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+	      SONAR_JDBC_USERNAME: sonar
+	      SONAR_JDBC_PASSWORD: sonar
+	    volumes:
+	      - sonarqube_data:/opt/sonarqube/data
+	      - sonarqube_extensions:/opt/sonarqube/extensions
+	      - sonarqube_logs:/opt/sonarqube/logs
+	    ports:
+	      - "9000:9000"
+	  db:
+	    image: postgres:12
+	    environment:
+	      POSTGRES_USER: sonar
+	      POSTGRES_PASSWORD: sonar
+	    volumes:
+	      - postgresql:/var/lib/postgresql
+	      - postgresql_data:/var/lib/postgresql/data
+	
+	volumes:
+	  sonarqube_data:
+	  sonarqube_extensions:
+	  sonarqube_logs:
+	  postgresql:
+	  postgresql_data:
+	
+	---For this, I will create a docker-compose.yml using the below command---
+	
+	nano docker-compose.yml
+	
+	---we can access our server---
+	
+	docker-compose up -d
+	
+	---In order to tear down the complete infra, we can run the below command which will remove all the containers and our server will no longer be accessible.---
+	
+	docker-compose down
 
 
 # TRIVY INSTALLATION STEPS
