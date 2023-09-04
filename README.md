@@ -1,5 +1,6 @@
 # DevSecOps SDLC Pipeline
-![DevSecOps SDLC](https://github.com/shubnimkar/DevSecOps/assets/46809421/c119aec4-b686-4c15-91cb-8c655669970f)
+
+![DevSecOps SDLC](https://github.com/shubnimkar/DevSecOps/assets/46809421/def7bd4c-f56e-447f-803d-accb57914c68)
 
 ## Objective:
 
