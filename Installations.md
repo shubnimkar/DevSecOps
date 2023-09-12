@@ -226,3 +226,48 @@
 	    --json flag formats the output as JSON.
 	
 	The . at the end specifies that TruffleHog should scan the current directory and its subdirectories.
+
+# Prometheus and Grafana Installation: 
+
+	docker run -d --name prometheus -p 9090:9090 prom/prometheus
+	
+	docker run -d --name grafana -p 3000:3000 grafana/grafana
+	
+	docker ps
+	
+	docker exec -it 2fc4b0a39428 /bin/sh
+	
+	Inside Container:
+	
+	cd /etc/prometheus
+	ls
+	 vi prometheus.yml
+		inside this yml add this at the end.
+		- job_name: 'DevSecOps'
+	 	  metrics_path: /prometheus
+	  	  static_configs:
+	    	     - targets: {'3.108.238.36:8080'}
+	exit
+	
+	docker restart <Container ID>
+	
+	Take jenkins instance ip <http://3.108.238.36:9090/>
+	add <jenkins_job_total_duration_count>
+	click on Execute
+	
+	Now open Grafana Web Ui ( http://3.108.238.36:3000/)
+	username: admin and password : admin
+	Click on Add Data Source and Select Prometheus
+	Add Prometheus url (http://3.108.238.36:9090/)
+	Save and Test.
+	
+	Select Create Dashboard
+	In Query add Metrics (jenkins_plugins_active)
+	Provide Panel Title.
+	Save Dashboard.
+	
+	Select Import Dashboard
+	give dashboard code 9964
+	 Click on load
+	select prometheus from drop down in promethus tab.
+	Now Dashboard will appear.
